@@ -1,0 +1,38 @@
+Understanding of Alternative LB Requirements
+#+ATTR_HTML: border="3" rules="all" frame="all
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| Name      | Descption                                                       | Category | Understanding                                                         | Solution                                                         |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| artf36506 | Http Pipeline[1] support                                        | Protocol | No extra effort needed,it's the same at TCP layer.                    | Default                                                          |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| artf36484 | Specialized HTTP Handling RTSP                                  | Protocol | Seperating RTP[2] and RTCP[3],make the packets sticky to the same TS. | iptable+fwmark(on 7070,554,(udp:6970-7170)+persistence [4]21.13  |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| artf36478 | IPv6 support                                                    | Advanced | LVS itself support IPv6,HA software may have issue.                   | HA softwore(Keepalved/HeartBeat) claim to support IPv6,need test |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| artf36480 | Support for: Pools, Virtual Servers, nodes                      | Basic LB | Basic features of LVS.                                                | Default                                                          |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| artf36480 | Scheduling algorithm:support Round Robin,Ratio,Least Connection | Basic LB | Basic features of LVS.                                                | Default                                                          |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+| artf36481 | Load Balancing Transparent Devices                              | Basic LB | fwmark-servive is for this,together with iptable.                     | iptable+fwmark+routing table                                     |
+|           |                                                                 |          |                                                                       |                                                                  |
+|-----------+-----------------------------------------------------------------+----------+-----------------------------------------------------------------------+------------------------------------------------------------------|
+
+
+- RTSP example
+
+ : # iptables -t mangle -A PREROUTING -i eth0 -p tcp -s 0.0.0.0/0 -d 209.174.123.48 --dport 80 -j MARK --set-mark 1
+ : # iptables -t mangle -A PREROUTING -i eth0 -p udp -s 0.0.0.0/0 -d 209.174.123.48 --dport 6970:7170 -j MARK --set-mark 1
+ : # iptables -t mangle -A PREROUTING -i eth0 -p tcp -s 0.0.0.0/0 -d 209.174.123.48 --dport 554 -j MARK --set-mark 1
+ : Then I added the lvs-dr like the examples:
+ : # ipvsadm -A -f 1 -s rr
+ : # ipvsadm -a -f 1 -r 209.174.123.45 -g
+ : # ipvsadm -a -f 1 -r 209.174.123.47 -g
+ : And I get this with ipvsadm:
+ : FWM  1 rr
+ :  -> lead.web.cait.org:0          Route   1      0          1
+ :  -> tin.web.cait.org:0           Route   1      1          1
+
+[1]http://en.wikipedia.org/wiki/HTTP_pipelining
+[2]http://en.wikipedia.org/wiki/Real-time_Transport_Protocol
+[3]http://en.wikipedia.org/wiki/RTCP
+[4]http://www.austintek.com/LVS/LVS-HOWTO/HOWTO/LVS-HOWTO.services.multi-port.html
