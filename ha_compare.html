@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Comparison between 2 HA solutions</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="title" content="Comparison between 2 HA solutions"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2012-07-03 18:43:41 HKT"/>
+<meta name="author" content="Nice"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">Comparison between 2 HA solutions</h1>
+
+<table  border="3" cellspacing="0" cellpadding="6" rules="all" frame="all">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left"></th><th scope="col" class="left">Sloutin 1</th><th scope="col" class="left">Slution 2</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">Compare Item</td><td class="left">SUSE LINUX HA EXTENSION</td><td class="left">KeepAlived</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Components</td><td class="left">HeartBeat(openais)+corosync2+pacemaker+ldirectord</td><td class="left">KeepAlived,very light-weight</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Usage</td><td class="left">General Linux HA solution,support a lot of other resources</td><td class="left">VRRP + LVS + HealthChecker</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">License</td><td class="left">All components are open sourcing,but the product is commercial<sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup></td><td class="left">GPL</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Installation</td><td class="left">Provided in suse repository,name is "ha_sles"</td><td class="left">make and run</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Configuration management</td><td class="left">Plain text/GUI(yast2 cluter,yast2 iplb)</td><td class="left">plain text</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Runtime</td><td class="left">A Group of processes</td><td class="left">1 parent process,2 child(can be enabled/disabled by configuration)</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Configuration files</td><td class="left">Each component owns 1 configuration ,can be managed by gui tools</td><td class="left">1 file,all in 1,more readable,like DSL</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Monitoring</td><td class="left">Embeded tools from SUSE linux HA extension</td><td class="left">keepalived embeded mail function or together with nagios</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Support mode</td><td class="left">Active/stand_by active/active?</td><td class="left">active/active<sup><a class="footref" name="fnr.2" href="#fn.2">2</a></sup> <sup><a class="footref" name="fnr.3" href="#fn.3">3</a></sup>  active/stand_by etc,very flexible</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Solution to split brain</td><td class="left">Stonith device</td><td class="left">by "priority" configuration</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Connection tracking sync</td><td class="left">Shell script to  switch between master and backup state?</td><td class="left">by configuration "lvs_sync_daemon_inteface eth0"</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Handy feature</td><td class="left">Reuse of defined heatbeat resoure</td><td class="left">1.add del ip or route on change to MASTER,to BACKUP. 2.define static ip and routes.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Advance feature</td><td class="left">Not direct and intuitive enough to archive</td><td class="left">1.virtual service group support very large lvss. 2.fail over by lvs services group.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Customization</td><td class="left">Write OCF Resource Agent <sup><a class="footref" name="fnr.4" href="#fn.4">4</a></sup></td><td class="left">1.real node health check script. 2.track script for cluster node. 3.dynamiclly adjust weight by customized script</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Performance</td><td class="left">ldirectord is writeen in perl,fail over might be slower</td><td class="left">Written in c,it's architecture results in instant failover</td></tr>
+</tbody>
+</table>
+
+
+
+
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+<p class="footnote"><sup><a class="footnum" name="fn.1" href="#fnr.1">1</a></sup> <a href="http://www.suse.com/zh-cn/products/highavailability/how-to-buy/">http://www.suse.com/zh-cn/products/highavailability/how-to-buy/</a>
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn.2" href="#fnr.2">2</a></sup> <a href="http://archive.linuxvirtualserver.org/html/lvs-users/2010-01/msg00052.html">http://archive.linuxvirtualserver.org/html/lvs-users/2010-01/msg00052.html</a>
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn.3" href="#fnr.3">3</a></sup> <a href="http://www.ultramonkey.org/papers/active_active/active_active.shtml">http://www.ultramonkey.org/papers/active_active/active_active.shtml</a>
+</p>
+
+
+<p class="footnote"><sup><a class="footnum" name="fn.4" href="#fnr.4">4</a></sup> <a href="http://www.linux-ha.org/doc/dev-guides/ra-dev-guide.html">http://www.linux-ha.org/doc/dev-guides/ra-dev-guide.html</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2012-07-03 18:43:41 HKT</p>
+<p class="author">Author: Nice</p>
+<p class="creator">Org version 7.8.11 with Emacs version 24</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>
